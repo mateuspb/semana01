@@ -8,101 +8,61 @@ namespace Codenation.Challenge
         // cifra o campo de texto utilizando o número de casas de deslocamento
         public string Crypt(string message)
         {
-            // se a mensagem recebida for nula gera excecao
-            if (message == null) throw new System.ArgumentNullException();
-
-            // se a mensagem recebida estiver em branco
-            if (message == String.Empty) return message;
-
-            // definicao das variaveis
-            int numCar = 0, num = 0, numero_casas = 3;
-            string textoDec = "", textoCif = "";
-
-            // converte a string recebida para letras minusculas
-            textoDec = message.ToLower();
-
-            // seta o tamanho do texto a ser criptografado
-            numCar = textoDec.Length;
-
-            // laco de repeticao para percorrer a string caracter por caracter
-            for (int i = 0; i < numCar; i++)
-            {
-                // pega o codigo ASCII do caracter na posicao 
-                num = Convert.ToInt32(textoDec[i]);
-                
-                // se o caracter for uma letra efetua a criptografia
-                if (num >= 97 && num <= 122)
-                {
-                    // efetua o deslocamento, somando o numero de casas
-                    num = num + numero_casas;
-
-                    // se ultrapassou o alfabeto (caracteres de 'a' a 'z')
-                    if (num > 122)
-                    {
-                        // retorna pra primeira letra e soma a quantidade que ultrapassou a ultima letra
-                        num = 96 + (num - 122);
-                    }
-                }
-                // se o caracter nao for um numero ou um espaco gera excecao
-                else if (!((num >= 48 && num <= 57) || (num == 32)))
-                {
-                    throw new System.ArgumentOutOfRangeException();
-                }
-
-                // adciona a letra criptografada ao texto
-                textoCif += Convert.ToChar(num);
-            }
-            // retorna a string contendo o texto criptografado
-            return (textoCif);
+            return Converte(message, 3);
         }
 
         // funcao que efetua a descriptografia de uma string
         // decifra o campo de texto cifrado utilizando o número de casas de deslocamento
         public string Decrypt(string cryptedMessage)
         {
-            // se a mensagem recebida for nula gera excecao
-            if (cryptedMessage == null) throw new System.ArgumentNullException();
+            return Converte(cryptedMessage, -3);
+        }
 
-            // definicao das variaveis
-            int numCar = 0, num = 0, numero_casas = 3;
-            string textoDec = "", textoCif = "";
+        // funcao que efetua a criptografia ou descriptografia de um texto utilizando o deslocamento    
+        public string Converte(string texto, int deslocamento)
+        {
+            // validacoes
+            if (texto == null) throw new System.ArgumentNullException();
+            if (texto == String.Empty) return texto;
 
-            // converte a string recebida para letras minusculas
-            textoCif = cryptedMessage.ToLower();
+            // declaracao de variaveis
+            int caracter = 0;
+            string saida = String.Empty;
 
-            // seta o tamanho do texto a ser descriptografado
-            numCar = textoCif.Length;
-
+            texto = texto.ToLower();
+            
             // laco de repeticao para percorrer a string caracter por caracter
-            for (int i = 0; i < numCar; i++)
+            for (int i = 0; i < texto.Length ; i++)
             {
                 // pega o codigo ASCII do caracter na posicao 
-                num = Convert.ToInt32(textoCif[i]);
+                caracter = Convert.ToInt32(texto[i]);
 
-                // se o caracter for uma letra efetua a descriptografia
-                if (num >= 97 && num <= 122)
+                // se o caracter for uma letra efetua a criptografia
+                if (caracter >= 97 && caracter <= 122)
                 {
-                    // efetua o deslocamento, diminuindo o numero de casas
-                    num = num - numero_casas;
+                    // efetua o deslocamento
+                    caracter = caracter + deslocamento;
 
                     // se ultrapassou o alfabeto (caracteres de 'a' a 'z')
-                    if (num < 97)
+                    if (caracter > 122)
                     {
-                        // retorna pra ultima letra e diminui a quantidade que ultrapassou a primeira letra
-                        num = 123 - (97 - num);
+                        caracter = caracter - 26;
+                    }
+                    else if (caracter < 97)
+                    {
+                        caracter = caracter + 26;
                     }
                 }
                 // se o caracter nao for um numero ou um espaco gera excecao
-                else if (!((num >= 48 && num <= 57) || (num == 32)))
+                else if (!((caracter >= 48 && caracter <= 57) || (caracter == 32)))
                 {
                     throw new System.ArgumentOutOfRangeException();
                 }
 
-                // adciona a letra descriptografada ao texto
-                textoDec += Convert.ToChar(num);
+                // adciona a letra criptografada ao texto
+                saida += Convert.ToChar(caracter);
             }
-            // retorna a string contendo o texto descriptografado
-            return (textoDec);
+            return saida;
         }
     }
 }
