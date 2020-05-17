@@ -23,15 +23,49 @@ namespace Codenation.Challenge
         public void Teste_Crypt()
         {
             var cypher = new CesarCypher();
-            Assert.Equal("whvwh1 frp hvsdfr abc", cypher.Crypt("teste1 com espaco xyz"));
+            Assert.Equal("whvwh 123 frp hvsdfr abc", cypher.Crypt("teste 123 com espaco xyz"));
         }
 
         [Fact]
         public void Teste_Decrypt()
         {
             var cypher = new CesarCypher();
-            Assert.Equal("teste1 com espaco xyz", cypher.Decrypt("whvwh1 frp hvsdfr abc"));
+            Assert.Equal("teste 123 com espaco xyz", cypher.Decrypt("whvwh 123 frp hvsdfr abc"));
         }
 
+        [Fact]
+        public void Teste_Crypt_Maiuscula()
+        {
+            var cypher = new CesarCypher();
+            Assert.Equal("whvwh frp hvsdfr abc", cypher.Crypt("Teste COM espaco XYZ"));
+        }
+
+        [Fact]
+        public void Teste_Decrypt_Maiuscula()
+        {
+            var cypher = new CesarCypher();
+            Assert.Equal("teste com espaco xyz", cypher.Decrypt("Whvwh FRP hvsdfr ABC"));
+        }
+
+        [Fact]
+        public void Teste_Crypt_Branco()
+        {
+            var cypher = new CesarCypher();
+            Assert.Equal(" ", cypher.Crypt(" "));
+        }
+
+        [Fact]
+        public void Teste_Decrypt_Branco()
+        {
+            var cypher = new CesarCypher();
+            Assert.Equal(" ", cypher.Decrypt(" "));
+        }
+
+        [Fact]
+        public void Teste_Crypt_Erro_Caracter_Invalido()
+        {
+            var cypher = new CesarCypher();
+            Assert.Throws<ArgumentOutOfRangeException>(() => cypher.Crypt("Teste COM ç"));
+        }
     }
 }
